@@ -1,0 +1,20 @@
+<h2 mat-dialog-title>Upload File(s)</h2>
+<mat-dialog-content>
+    <input mat-button id="singleFile" type="file" [fileUploadInputFor]= "fileUploadQueue"/>
+    <div [fileUploadInputFor]="fileUploadQueue" class="upload-drop-zone">
+        Drag & Drop file(s)
+    </div>
+   
+    <div style="width: 500px">
+        <mat-file-upload-queue #fileUploadQueue
+        [fileAlias]="'file'"
+        [httpUrl]="uploadUrl">
+    
+        <mat-file-upload [file]="file" [id]="i" *ngFor="let file of fileUploadQueue.files; let i = index"></mat-file-upload>
+    </mat-file-upload-queue>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Close</button>
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Download</button>
+</mat-dialog-actions>
