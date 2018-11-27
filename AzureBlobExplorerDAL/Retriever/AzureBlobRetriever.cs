@@ -9,18 +9,18 @@ using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace AzureBlobExplorerDAL.Retriever
 {
-    public class AzureBlobRetriever : AzureBlob
+    public class AzureBlobRetriever : AzureContainer
     {
-        public static async Task<AzureBlobRetriever> InitializeAsync()
+        public static async Task<AzureBlobRetriever> InitializeAsync(string containerName)
         {
-            var response = new AzureBlobRetriever();
+            var response = new AzureBlobRetriever(containerName);
             await response.CreateContainerIfNotExists();
             return response;
         }
 
         public async Task<IEnumerable<IListBlobItem>> GetAllBlobs()
         {
-            var result = await CloudBlobContainer.ListBlobsSegmentedAsync(string.Empty, true, BlobListingDetails.All, int.MaxValue, null, null, null);
+            var result = await CloudBlobContainer.ListBlobsSegmentedAsync(string.Empty, new BlobContinuationToken());
             return result.Results;
         }
 
@@ -33,7 +33,7 @@ namespace AzureBlobExplorerDAL.Retriever
             return await result.OpenReadAsync(AccessCondition.GenerateEmptyCondition(), null,null);
         }
 
-        private AzureBlobRetriever() { }
+        private AzureBlobRetriever(string containerName): base(containerName) { }
 
     }
 }

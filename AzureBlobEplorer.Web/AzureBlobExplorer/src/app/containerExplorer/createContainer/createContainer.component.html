@@ -1,0 +1,9 @@
+<mat-dialog-content>
+    <mat-form-field class="input-full-width">
+        <input matInput placeholder="Folder name" [(ngModel)]="containerName">
+    </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Close</button>
+    <button mat-button [disabled]="isContainerNameEmpty()" (click)="createContainer()">Create</button>
+</mat-dialog-actions>

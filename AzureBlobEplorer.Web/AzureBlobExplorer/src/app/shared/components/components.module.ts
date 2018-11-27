@@ -1,5 +1,8 @@
 import { MatButtonModule, MatCheckboxModule, MatToolbarModule, MatMenuModule, MatIconModule, MatFormFieldModule, MatTableModule, MatInputModule, MatPaginatorModule, MatDialogModule, MatTooltipModule } from '@angular/material';
+import { MatFileUploadModule } from 'angular-material-fileupload';
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common'; 
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -13,7 +16,10 @@ import { NgModule } from '@angular/core';
     MatInputModule, 
     MatPaginatorModule, 
     MatDialogModule, 
-    MatTooltipModule  
+    MatTooltipModule,
+    MatFileUploadModule,
+    CommonModule,
+    FormsModule
   ],
   exports: [
     MatButtonModule, 
@@ -26,7 +32,10 @@ import { NgModule } from '@angular/core';
     MatInputModule, 
     MatPaginatorModule, 
     MatDialogModule, 
-    MatTooltipModule
+    MatTooltipModule,
+    MatFileUploadModule,
+    CommonModule,
+    FormsModule
   ],
 })
 export class ComponentsModule { }

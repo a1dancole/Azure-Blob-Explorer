@@ -1,5 +1,6 @@
 import { Component, Inject } from "@angular/core";
-import { SettingsService } from "../../shared/settings/settings.service";
+import { BlobExplorerService } from "../services/blobExplorer.service";
+import { MAT_DIALOG_DATA } from "@angular/material";
 
 @Component({
     selector: "blob-uploader-dialog",
@@ -9,7 +10,7 @@ import { SettingsService } from "../../shared/settings/settings.service";
 export class UploadBlobComponent {
     public uploadUrl: string;
 
-    constructor(private _settingsService: SettingsService) {
-        this.uploadUrl = this._settingsService.settings.apiUrl + "createblob" + "?code=" + this._settingsService.settings.apiKey
+    constructor(@Inject(MAT_DIALOG_DATA) private data: any, private _blobExplorerService: BlobExplorerService) {
+        this.uploadUrl = this._blobExplorerService.buildUploadBlobUrl(data.containerName);
     }
 }

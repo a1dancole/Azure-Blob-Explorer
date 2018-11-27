@@ -22,15 +22,16 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace AzureBlobExplorer.Functions
 {
-    public static class BlobRetrieverApi
+    public static class BlobApi
     {
         [FunctionName("GetAllBlobs")]
         public static async Task<IActionResult> GetAllBlobs(
-            [HttpTrigger(AuthorizationLevel.System, Constants.Constants.HttpGet, Route = "GetAllBlobs")] HttpRequest request,
-            ILogger logger)
+            [HttpTrigger(AuthorizationLevel.System, Constants.Constants.HttpGet, Route = "GetAllBlobs/{containerName}")] HttpRequest request,
+            ILogger logger,
+            string containerName)
         {
             var blobRetriever =
-                await AzureBlobRetriever.InitializeAsync();
+                await AzureBlobRetriever.InitializeAsync(containerName);
 
             var response = await blobRetriever.GetAllBlobs();
 
@@ -39,25 +40,27 @@ namespace AzureBlobExplorer.Functions
 
         [FunctionName("GetBlob")]
         public static async Task<IActionResult> GetBlob(
-            [HttpTrigger(AuthorizationLevel.System, Constants.Constants.HttpGet, Route = "GetBlob/{blobName}")] HttpRequest request,
+            [HttpTrigger(AuthorizationLevel.System, Constants.Constants.HttpGet, Route = "GetBlob/{containerName}/{blobName}")] HttpRequest request,
             ILogger logger,
+            string containerName,
             string blobName)
         {
             var blobRetriever =
-                await AzureBlobRetriever.InitializeAsync();
+                await AzureBlobRetriever.InitializeAsync(containerName);
 
             return new OkObjectResult(await blobRetriever.GetBlob(blobName));
         }
 
         [FunctionName("GetBlobAsStream")]
         public static async Task<IActionResult> DownloadBlobInline(
-            [HttpTrigger(AuthorizationLevel.System, Constants.Constants.HttpGet, Route = "DownloadBlobInline/{blobName}")] HttpRequest request,
+            [HttpTrigger(AuthorizationLevel.System, Constants.Constants.HttpGet, Route = "DownloadBlobInline/{containerName}/{blobName}")] HttpRequest request,
             ILogger logger,
+            string containerName,
             string blobName
             )
         {
             var blobRetriever =
-                await AzureBlobRetriever.InitializeAsync();
+                await AzureBlobRetriever.InitializeAsync(containerName);
 
             var stream = await blobRetriever.GetBlobAsStream(blobName);
 
@@ -66,12 +69,13 @@ namespace AzureBlobExplorer.Functions
 
         [FunctionName("DownloadBlob")]
         public static async Task<FileResult> DownloadBlob(
-            [HttpTrigger(AuthorizationLevel.System, Constants.Constants.HttpGet, Route = "DownloadBlob/{blobName}")]
+            [HttpTrigger(AuthorizationLevel.System, Constants.Constants.HttpGet, Route = "DownloadBlob/{containerName}/{blobName}")]
             HttpRequest request,
             ILogger logger,
+            string containerName,
             string blobName)
         {
-            var blobRetriever = await AzureBlobRetriever.InitializeAsync();
+            var blobRetriever = await AzureBlobRetriever.InitializeAsync(containerName);
 
             using (var ms = new MemoryStream())
             {
@@ -86,14 +90,15 @@ namespace AzureBlobExplorer.Functions
 
         [FunctionName("DeleteBlob")]
         public static async Task<IActionResult> DeleteBlob(
-            [HttpTrigger(AuthorizationLevel.System, Constants.Constants.HttpDelete, Route = "DeleteBlob/{blobName}")]
+            [HttpTrigger(AuthorizationLevel.System, Constants.Constants.HttpDelete, Route = "DeleteBlob/{containerName}/{blobName}")]
             HttpRequest request,
             ILogger logger,
+            string containerName,
             string blobName)
         {
             try
             {
-                var blobDeleter = await AzureBlobDeleter.InitializeAsync();
+                var blobDeleter = await AzureBlobDeleter.InitializeAsync(containerName);
                 await blobDeleter.DeleteBlob(blobName);
 
                 return new OkResult();
@@ -106,9 +111,10 @@ namespace AzureBlobExplorer.Functions
 
         [FunctionName("CreateBlob")]
         public static async Task<IActionResult> CreateBlob(
-            [HttpTrigger(AuthorizationLevel.System, Constants.Constants.HttpPost, Route = "CreateBlob")]
+            [HttpTrigger(AuthorizationLevel.System, Constants.Constants.HttpPost, Route = "CreateBlob/{containerName}")]
             HttpRequest request,
-            ILogger logger)
+            ILogger logger,
+            string containerName)
         {
             var formData = await request.ReadFormAsync();
             var file = formData?.Files?.FirstOrDefault();
@@ -116,7 +122,7 @@ namespace AzureBlobExplorer.Functions
             {
                 return new BadRequestObjectResult("No file in form data");
             }
-            var blobCreator = await AzureBlobCreator.InitializeAsync();
+            var blobCreator = await AzureBlobCreator.InitializeAsync(containerName);
             var response = await blobCreator.CreateBlob(file.OpenReadStream(), file.FileName, file.ContentType);
 
             return new OkObjectResult(response);

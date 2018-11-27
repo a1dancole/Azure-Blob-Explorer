@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.106
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureBlobExplorer", "AzureBlobExplorer\AzureBlobExplorer.csproj", "{A1BABD9D-9A6D-4D04-8701-C12D3108F2BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureBlobExplorerDAL", "AzureBlobExplorerDAL\AzureBlobExplorerDAL.csproj", "{5880812D-EDE2-48BF-9784-BDC8CDDF8A8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureBlobExplorerDAL", "AzureBlobExplorerDAL\AzureBlobExplorerDAL.csproj", "{5880812D-EDE2-48BF-9784-BDC8CDDF8A8E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

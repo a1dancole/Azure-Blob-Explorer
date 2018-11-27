@@ -1,8 +1,10 @@
 import { OnInit, Component } from "@angular/core";
 import { BlobExplorerService } from "./services/blobExplorer.service";
-import { BlobDetail } from "./models/blobdetail";
+import { BlobDetail } from "./models/blobDetail";
 import { MatDialog } from '@angular/material';
 import { ViewBlobComponent } from "./viewBlob/viewBlob.component";
+import { Router, ActivatedRoute } from "@angular/router";
+import { UploadBlobComponent } from "./uploadBlob/blobUploader.component";
 
 @Component({
     selector: 'blob-explorer',
@@ -11,12 +13,13 @@ import { ViewBlobComponent } from "./viewBlob/viewBlob.component";
 })
 export class BlobExplorerComponent implements OnInit {
 
-    blobDetails?: BlobDetail[];
-    blobDetailsTableColumns: string[] = ['name', 'createdTime', 'lastModified', 'actions'];
-    supportedMimes: string[] = ['image/png', 'text/plain'];
+    public blobDetails?: BlobDetail[];
+    public blobDetailsTableColumns: string[] = ['name', 'createdTime', 'lastModified', 'actions'];
+    public containerName: string;
+    private supportedMimes: string[] = ['image/png', 'text/plain'];
 
-    constructor(private _blobExplorerService: BlobExplorerService, private _dialog: MatDialog) {
-
+    constructor(private _blobExplorerService: BlobExplorerService, private _dialog: MatDialog, private _router: Router, private _activatedRoute: ActivatedRoute) {
+        this.containerName = this._activatedRoute.snapshot.params['containerName']
     }
 
     ngOnInit() {
@@ -26,18 +29,28 @@ export class BlobExplorerComponent implements OnInit {
     public viewBlob(blob: BlobDetail) {
         const dialog = this._dialog.open(ViewBlobComponent, {
             data: {
+                containerName: this.containerName,
                 blob: blob
             }
         });
-        dialog.afterClosed().subscribe(result => { })
+        dialog.afterClosed().subscribe(x => { })
     }
 
-    public downloadBlob(blob: BlobDetail) {
-        return this._blobExplorerService.downloadBlob(blob.fileName);
+    public uploadBlob() {
+        const dialog = this._dialog.open(UploadBlobComponent, {
+            data: {
+                containerName: this.containerName
+            }
+        });
+        dialog.afterClosed().subscribe(x => { this.retrieveBlobDetails(); })
     }
 
-    public deleteBlob(blob: BlobDetail) {
-        this._blobExplorerService.deleteBlob(blob.fileName).subscribe(response => {
+    public downloadBlob(blob: BlobDetail): void {
+        return this._blobExplorerService.downloadBlob(this.containerName, blob.fileName);
+    }
+
+    public deleteBlob(blob: BlobDetail): void {
+        this._blobExplorerService.deleteBlob(this.containerName, blob.fileName).subscribe(x => {
             this.retrieveBlobDetails();
         });
     }
@@ -45,16 +58,20 @@ export class BlobExplorerComponent implements OnInit {
     public canDisplayInBrowser(blob: BlobDetail) : boolean {
         var response = this.supportedMimes.some(o => o === blob.contentType) || Array.prototype.reduce.call(navigator.plugins, function (supported, plugin) {
             return supported || Array.prototype.reduce.call(plugin, function (supported, mime) {
-                return supported ||  mime.type == blob.contentType;
+                return supported || mime.type == blob.contentType;
             }, supported);
         }, false);
 
         return response;
     }
 
+    public back(): void {
+        this._router.navigate(['']) ;
+    }
+
     private retrieveBlobDetails() {
-        this._blobExplorerService.getAllBlobs().subscribe(response => {
-            this.blobDetails = response;
+        this._blobExplorerService.getAllBlobs(this.containerName).subscribe(x => {
+            this.blobDetails = x;
         })
     }
 }

@@ -7,11 +7,11 @@ using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace AzureBlobExplorerDAL.Creator
 {
-    public class AzureBlobCreator : AzureBlob
+    public class AzureBlobCreator : AzureContainer
     {
-        public static async Task<AzureBlobCreator> InitializeAsync()
+        public static async Task<AzureBlobCreator> InitializeAsync(string containerName)
         {
-            var response = new AzureBlobCreator();
+            var response = new AzureBlobCreator(containerName);
             await response.CreateContainerIfNotExists();
             return response;
         }
@@ -24,6 +24,6 @@ namespace AzureBlobExplorerDAL.Creator
             return blob;
         }
 
-        private AzureBlobCreator() : base() { }        
+        private AzureBlobCreator(string containerName) : base(containerName) { }        
     }
 }

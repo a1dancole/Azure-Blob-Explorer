@@ -27,8 +27,11 @@ export class HttpClient extends Http {
         return super.delete(this.buildUrl(url), this.buildRequestOptions(options));
     }
 
+    public getUrl(url:string): string {
+        return this.buildUrl(url)
+    }
 
-    private buildUrl(requestUrl :string) {
+    private buildUrl(requestUrl :string): string {
         return this._settingsService.settings.apiUrl + requestUrl + "?code=" + this._settingsService.settings.apiKey;
     }
 

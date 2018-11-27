@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace AzureBlobExplorerDAL.Deleter
 {
-    public class AzureBlobDeleter : AzureBlob
+    public class AzureBlobDeleter : AzureContainer
     {
 
-        public static async Task<AzureBlobDeleter> InitializeAsync()
+        public static async Task<AzureBlobDeleter> InitializeAsync(string containerName)
         {
-            var response = new AzureBlobDeleter();
+            var response = new AzureBlobDeleter(containerName);
             await response.CreateContainerIfNotExists();
             return response;
         }
@@ -21,6 +21,6 @@ namespace AzureBlobExplorerDAL.Deleter
             await blob.DeleteAsync();
         }
 
-        private AzureBlobDeleter() { }
+        private AzureBlobDeleter(string containerName) : base(containerName) { }
     }
 }

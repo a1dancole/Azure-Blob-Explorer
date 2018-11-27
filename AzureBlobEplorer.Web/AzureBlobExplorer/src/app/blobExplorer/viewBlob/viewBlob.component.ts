@@ -1,7 +1,6 @@
 import { Component, Inject } from "@angular/core";
-import { Http } from "@angular/http";
 import {MAT_DIALOG_DATA} from '@angular/material';
-import { SettingsService } from "../../shared/settings/settings.service";
+import { BlobExplorerService } from "../services/blobExplorer.service";
 
 @Component({
     selector: "view-blob-dialog",
@@ -13,8 +12,8 @@ export class ViewBlobComponent {
     public fileName: string;
     public contentType: string;
 
-    constructor(@Inject(MAT_DIALOG_DATA) private data: any, private _http: Http, private _settingsService: SettingsService) {
-        this.url = this._settingsService.settings.apiUrl + "downloadblobinline/" + data.blob.fileName + "?code=" + this._settingsService.settings.apiKey;
+    constructor(@Inject(MAT_DIALOG_DATA) private data: any, private _blobExplorerService: BlobExplorerService) {
+        this.url = this._blobExplorerService.buildDownloadBlobInlineUrl(data.containerName, data.blob.fileName);
         this.fileName = data.blob.fileName;
     }
 }

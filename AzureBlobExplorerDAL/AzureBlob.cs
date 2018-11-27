@@ -11,14 +11,12 @@ namespace AzureBlobExplorerDAL
 {
     public class AzureBlob
     {
-        public readonly CloudBlobContainer CloudBlobContainer;
+        public readonly CloudBlobClient CloudBlobClient;
 
         public AzureBlob()
         {
             var storageAccount = new CloudStorageAccount(new StorageCredentials(Environment.GetEnvironmentVariable(Constants.StorageAccountName), Environment.GetEnvironmentVariable(Constants.StorageAccountKey)), true);
-            CloudBlobContainer = storageAccount.CreateCloudBlobClient().GetContainerReference("blob-explorer");
+            CloudBlobClient = storageAccount.CreateCloudBlobClient();
         }
-
-        public async Task CreateContainerIfNotExists() => await CloudBlobContainer.CreateIfNotExistsAsync();
     }
 }
