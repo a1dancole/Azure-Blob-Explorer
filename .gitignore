@@ -1,0 +1,16 @@
+node_modules/
+obj/
+AzureBlobExplorerDAL/bin/Release/netstandard2.0/AzureBlobExplorerDAL.pdb
+AzureBlobExplorerDAL/bin/Release/netstandard2.0/AzureBlobExplorerDAL.dll
+AzureBlobExplorerDAL/bin/Release/netstandard2.0/AzureBlobExplorerDAL.deps.json
+AzureBlobExplorerDAL/bin/Debug/netstandard2.0/AzureBlobExplorerDAL.pdb
+AzureBlobExplorerDAL/bin/Debug/netstandard2.0/AzureBlobExplorerDAL.dll
+AzureBlobExplorerDAL/bin/Debug/netstandard2.0/AzureBlobExplorerDAL.deps.json
+AzureBlobExplorer/Properties/PublishProfiles/AzureBlobExplorer - Web Deploy.pubxml
+AzureBlobEplorer.Web/AzureBlobExplorer/src/package-lock.json
+AzureBlobEplorer.Web/AzureBlobExplorer/package-lock.json
+.vs/AzureBlobExplorer/v15/Server/sqlite3/storage.ide-wal
+.vs/AzureBlobExplorer/v15/Server/sqlite3/storage.ide-shm
+.vs/AzureBlobExplorer/v15/Server/sqlite3/storage.ide
+.vs/AzureBlobExplorer/v15/Server/sqlite3/db.lock
+.vs/AzureBlobExplorer/v15/.suo
