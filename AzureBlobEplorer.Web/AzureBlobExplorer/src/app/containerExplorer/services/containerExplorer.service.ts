@@ -17,4 +17,8 @@ export class ContainerExplorerService {
     public createContainer(containerName: string): Observable<boolean> {
         return this._httpClient.post("createcontainer/" + containerName).pipe(map(response => <boolean>response.json()))
     }
+
+    public deleteContainer(containerName: string): Observable<boolean> {
+        return this._httpClient.delete("deletecontainer/" + containerName).pipe(map(response => <boolean>response.json()))
+    }
 }

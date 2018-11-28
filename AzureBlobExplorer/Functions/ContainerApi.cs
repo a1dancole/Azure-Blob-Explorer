@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using AzureBlobExplorer.Mappers;
 using AzureBlobExplorerDAL.Creator;
+using AzureBlobExplorerDAL.Deleter;
 using AzureBlobExplorerDAL.Retriever;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -34,6 +35,17 @@ namespace AzureBlobExplorer.Functions
         {
             var creator = await AzureContainerCreator.InitializeAsync();
             return new OkObjectResult(await creator.CreateContainer(containerName.ToLower()));
+        }
+
+        [FunctionName("DeleteContainer")]
+        public static async Task<IActionResult> DeleteContainer(
+            [HttpTrigger(AuthorizationLevel.System, Constants.Constants.HttpDelete, Route = "DeleteContainer/{containerName}")]
+            HttpRequest request,
+            ILogger logger,
+            string containerName)
+        {
+            var deleter = await AzureContainerDeleter.InitializeAsync(containerName);
+            return new OkObjectResult(await deleter.DeleteContainer());
         }
     }
 }
